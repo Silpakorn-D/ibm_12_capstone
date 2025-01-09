@@ -3,7 +3,10 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.http import JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
+from django.contrib import messages
 import logging
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -129,10 +132,10 @@ def get_dealer_details(request, dealer_id):
 
 def add_review(request):
     # Create a `add_review` view to submit a review
-    if (request.user.is_anonymous is False):
+    if (request.user.is_anonymous == False):
         data = json.loads(request.body)
         try:
-            response = post_review(data)
+            post_review(data)
             return JsonResponse({"status": 200})
         except:
             return JsonResponse({"status": 401,

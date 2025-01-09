@@ -2,7 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const fs = require('fs');
-const  cors = require ('cors');
+const  cors = require('cors');
 const app = express();
 const port = 3030;
 app.use(cors());
@@ -27,7 +27,7 @@ try {
   });
   
   // Some logic here
-} catch (err) {
+} catch (error) {
   res.status(500).json({ error: 'Error fetching documents' });
 }
 
