@@ -82,6 +82,7 @@ return(
           <td>{dealer['address']}</td>
           <td>{dealer['zip']}</td>
           <td>{dealer['state']}</td>
+          <td><a href={`/searchcars/${id}`}>SearchCars</a>	</td>
           {isLoggedIn ? (
             <td><a href={`/postreview/${dealer['id']}`}><img src={review_icon} className="review_icon" alt="Post Review"/></a></td>
            ):<></>
