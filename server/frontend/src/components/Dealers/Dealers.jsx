@@ -6,6 +6,8 @@ import review_icon from "../assets/reviewicon.png"
 
 const Dealers = () => {
   const [dealersList, setDealersList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [originalDealers, setOriginalDealers] = useState([]);
   // let [state, setState] = useState("")
   let [states, setStates] = useState([])
 
@@ -40,12 +42,30 @@ const Dealers = () => {
 
       setStates(Array.from(new Set(states)))
       setDealersList(all_dealers)
+      setOriginalDealers(all_dealers);
     }
   }
+
   useEffect(() => {
     get_dealers();
   },[]);  
 
+// function to manage input changes and filter the dealers based on the entered state query
+const handleInputChange = (event) => {
+const query = event.target.value;
+setSearchQuery(query);
+const filtered = originalDealers.filter(dealer =>
+  dealer.state.toLowerCase().includes(query.toLowerCase())
+);
+setDealersList(filtered);
+};
+
+// function to make the search input to original if the user leaves the search input incomplete
+const handleLostFocus = () => {
+if (!searchQuery) {
+  setDealersList(originalDealers);
+}
+}
 
 let isLoggedIn = sessionStorage.getItem("username") != null ? true : false;
 return(
@@ -60,13 +80,9 @@ return(
       <th>Address</th>
       <th>Zip</th>
       <th>
-      <select name="state" id="state" onChange={(e) => filterDealers(e.target.value)}>
-      <option value="" selected disabled hidden>State</option>
-      <option value="All">All States</option>
-      {states.map(state => (
-          <option value={state}>{state}</option>
-      ))}
-      </select>        
+      {/*searchable textbox*/} 
+      <input type="text" placeholder="Search states..." onChange={handleInputChange} 
+      onBlur={handleLostFocus} value={searchQuery} />        
 
       </th>
       {isLoggedIn ? (
@@ -82,7 +98,7 @@ return(
           <td>{dealer['address']}</td>
           <td>{dealer['zip']}</td>
           <td>{dealer['state']}</td>
-          <td><a href={`/searchcars/${id}`}>SearchCars</a>	</td>
+          <td><a href={`/searchcars/${dealer['id']}`}>SearchCars</a>	</td>
           {isLoggedIn ? (
             <td><a href={`/postreview/${dealer['id']}`}><img src={review_icon} className="review_icon" alt="Post Review"/></a></td>
            ):<></>
